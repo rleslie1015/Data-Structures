@@ -89,7 +89,7 @@ class DoublyLinkedList:
         # create new node
         new_node = ListNode(value)
         # if list is empty:
-        if self.length < 1:
+        if not self.head and not self.tail:
             # assing self.head and tail to new_node
             self.head = new_node
             self.tail = new_node
@@ -103,6 +103,7 @@ class DoublyLinkedList:
             new_node.prev = self.tail
             # reassing the tail to new node
             self.tail = new_node
+            
             # update the length
             self.length += 1
 
@@ -187,43 +188,16 @@ class DoublyLinkedList:
     List and inserts it as the new tail node of the List.
     """
     def move_to_end(self, node):
-        # print(self.head.next.value)
+        if self.tail == node:
+            return
         if self.head == node: # if we want to move the head
-            new_tail = self.head
-            new_tail.prev = self.tail
-
-            new_head = self.head.next
-
-
-            self.head = new_head
-            self.head.prev = None
-            self.tail.next = None
-            self.tail = new_tail
+            new_tail = self.remove_from_head()
+            self.add_to_tail(new_tail)
         else:
-            current = self.head
-            # while current is not node and current.next:
-            while current.next:
-                # update current to next
-                current = current.next
-
-                next_node = None
-                previous = None
-                if current == node:
-                    # place the previous and next node into variable
-                    # if current.prev is not None:
-                    previous = current.prev
-                    if current.next is not None:
-                        next_node = current.next
-                        # set the next_node.prev to previous
-                    next_node.prev = previous
-                    previous.next = next_node
-                    # self.tail to current 
-                    self.tail = current
-                    self.tail.next = None
-            print('self.head.value', self.head.value)
-            print('self.tail.value', self.tail.value)
-        
-           
+            new_tail_value = node.value
+            self.delete(node)
+            self.add_to_tail(new_tail_value)
+              
     """
     Deletes the input node from the List, preserving the 
     order of the other elements of the List.
@@ -250,12 +224,14 @@ class DoublyLinkedList:
             self.length -= 1
         else: # ( node is not head or tail ):
             current = self.head
-            while current is not node and current.next:
+            while current and current.next:
                 current = current.next
                 if current == node:
                     # get the prev and after nodes and assign them to None variables
                     next_node = current.next
-                    previous = current.previous
+                    # previous = None
+                    # if current.previous is not None:
+                    previous = current.prev
                     # assign previous.next to next_node
                     previous.next = next_node
                     next_node.previous = previous
@@ -284,10 +260,10 @@ node = ListNode(1)
 ll = DoublyLinkedList(node)
 
 ll.add_to_head(40)
-ll.add_to_tail(4)
 ll.move_to_end(ll.head)
 ll.add_to_tail(4)
-# ll.move_to_end(ll.head.next)
-print(ll)
-# ll.getMax()
+# ll.add_to_tail(4)
 print(ll.head.next.value)
+ll.move_to_end(ll.head.next)
+print(ll)
+# ll.get_max()
