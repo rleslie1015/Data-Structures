@@ -9,6 +9,9 @@ This part of the project comprises two days:
 2. Implement the `in_order_print`, `bft_print`, and `dft_print` methods
    on the BSTNode class.
 """
+from queue import Queue
+from stack import Stack
+
 class BSTNode:
     def __init__(self, value):
         self.value = value
@@ -73,17 +76,49 @@ class BSTNode:
     # Print all the values in order from low to high
     # Hint:  Use a recursive, depth first traversal
     def in_order_print(self):
-        pass
+        if self.left:
+            self.left.in_order_print()
+
+        print(self.value)
+
+        if self.right:
+            self.right.in_order_print()
 
     # Print the value of every node, starting with the given node,
     # in an iterative breadth first traversal
     def bft_print(self):
-        pass
+        # create a queue for nodes
+        queue = Queue()
+        # add first node to the queue
+        queue.enqueue(self.value)
+        # while queue is not empty
+        while len(queue) > 1:
+            #  remove the first node from the queue
+            curr = queue.dequeue()
+            # print the removes node
+            print(curr)
+            # add all children into queue
+            queue.enqueue(self.left)
+            queue.enqueue(self.right)
+
 
     # Print the value of every node, starting with the given node,
     # in an iterative depth first traversal
     def dft_print(self):
-        pass
+        # create a stack for nodes
+        stack = Stack()
+        #  add the fisrt node to the stack
+        stack.push(self.value)
+        # while stack is not empty 
+        while len(stack) > 1: 
+            # get the current node from the top of the stack
+            curr = stack.pop()
+            #  print that node
+            print(curr)
+            # add all children to the stack  
+            stack.push(self.right)
+            stack.push(self.left)
+        
 
     # Stretch Goals -------------------------
     # Note: Research may be required
@@ -109,21 +144,14 @@ bst.insert(3)
 bst.insert(4)
 bst.insert(2)
 
-# bst.bft_print()
-# bst.dft_print()
+bst.bft_print()
+bst.dft_print()
 
-# print("elegant methods")
-# print("pre order")
-# bst.pre_order_dft()
-# print("in order")
-# bst.in_order_dft()
-# print("post order")
-# bst.post_order_dft()  
+print("elegant methods")
+print("pre order")
+bst.pre_order_dft()
+print("in order")
+bst.in_order_print()
+print("post order")
+bst.post_order_dft()  
 
-
-# max_node = bst.get_max()
-# print(max_node)
-
-arr = []
-cb = lambda x: arr.append(x)
-bst.for_each(cb)
