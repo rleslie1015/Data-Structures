@@ -1,3 +1,4 @@
+from collections import deque
 """
 Binary search trees are a data structure that enforce an ordering over 
 the data they store. That ordering in turn makes it a lot more efficient 
@@ -9,8 +10,8 @@ This part of the project comprises two days:
 2. Implement the `in_order_print`, `bft_print`, and `dft_print` methods
    on the BSTNode class.
 """
-from queue import Queue
-from stack import Stack
+# from queue import Queue
+# from stack import Stack
 
 class BSTNode:
     def __init__(self, value):
@@ -52,10 +53,16 @@ class BSTNode:
 
     # Return the maximum value found in the tree
     def get_max(self):
-        current = self
-        while current.right:
-            current = current.right
-        return current.value
+        # recursive approach
+        if not self.right:
+            return self.value
+        return self.right.get_max()
+
+            # iterative approach
+        # current = self
+        # while current.right:
+        #     current = current.right
+        # return current.value
 
 
     # Call the function `fn` on the value of each node
@@ -88,36 +95,40 @@ class BSTNode:
     # in an iterative breadth first traversal
     def bft_print(self):
         # create a queue for nodes
-        queue = Queue()
+        qq = deque()
         # add first node to the queue
-        queue.enqueue(self.value)
+        qq.append(self)
         # while queue is not empty
-        while len(queue) > 1:
-            #  remove the first node from the queue
-            curr = queue.dequeue()
-            # print the removes node
-            print(curr)
+        while len(qq) > 0:
+            # remove the first node from the queue
+            curr = qq.popleft()
+            # print the removed node
+            print(curr.value)
             # add all children into queue
-            queue.enqueue(self.left)
-            queue.enqueue(self.right)
-
+            if curr.left:
+                qq.append(curr.left)
+            if curr.right:
+                qq.append(curr.right)
+            
 
     # Print the value of every node, starting with the given node,
     # in an iterative depth first traversal
     def dft_print(self):
         # create a stack for nodes
-        stack = Stack()
-        #  add the fisrt node to the stack
-        stack.push(self.value)
-        # while stack is not empty 
-        while len(stack) > 1: 
-            # get the current node from the top of the stack
+        stack = []
+    #     #  add the fisrt node to the stack
+        stack.append(self)
+    #     # while stack is not empty 
+        while len(stack) > 0:
+    #       # get the current node from the top of the stack
             curr = stack.pop()
-            #  print that node
-            print(curr)
-            # add all children to the stack  
-            stack.push(self.right)
-            stack.push(self.left)
+    #         #  print that node
+            print(curr.value)
+    #         # add all children to the stack 
+            if curr.right:
+                stack.append(curr.right)
+            if curr.left:
+                stack.append(curr.left)
         
 
     # Stretch Goals -------------------------
@@ -125,11 +136,20 @@ class BSTNode:
 
     # Print Pre-order recursive DFT
     def pre_order_dft(self):
-        pass
+        print(self.value)
+        if self.left:
+            self.left.pre_order_dft()
+        if self.right:
+            self.right.pre_order_dft()
 
     # Print Post-order recursive DFT
     def post_order_dft(self):
-        pass
+        if self.left:
+            self.left.post_order_dft()
+        if self.right:
+            self.right.post_order_dft()
+
+        print(self.value)
 
 """
 This code is necessary for testing the `print` methods
@@ -151,7 +171,14 @@ print("elegant methods")
 print("pre order")
 bst.pre_order_dft()
 print("in order")
-bst.in_order_print()
+bst.post_order_dft()
 print("post order")
 bst.post_order_dft()  
 
+
+# # max_node = bst.get_max()
+# # print(max_node)
+
+# arr = []
+# cb = lambda x: arr.append(x)
+# bst.for_each(cb)
